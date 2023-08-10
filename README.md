@@ -1,5 +1,5 @@
 
-# Discord Music Bot
+# Bootleg Boom Bot
 
 This bot allows users to play music from YouTube directly into Discord voice channels. It supports a variety of commands, including play, pause, skip, and queue management.
 
