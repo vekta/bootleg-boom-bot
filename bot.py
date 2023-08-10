@@ -4,7 +4,7 @@ import yt_dlp as youtube_dl
 import os
 import asyncio
 
-TOKEN = 'MTEzOTA0Mzc5ODQ3NTg4NjcwMw.GvEPCS.5PJFTLW5C481m9q5x6q0IK3EFQE2b2khkCR4OU'
+TOKEN = 'YOUR_TOKEN_HERE'
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
 bot.remove_command('help')
@@ -13,7 +13,7 @@ DOWNLOAD_FOLDER = "downloads"
 if not os.path.exists(DOWNLOAD_FOLDER):
     os.makedirs(DOWNLOAD_FOLDER)
 
-FFMPEG_PATH = "ffmpeg\\bin\\ffmpeg.exe"
+FFMPEG_PATH = "ffmpeg\\bin\\ffmpeg"
 
 # The song queues for each server
 song_queues = {}
