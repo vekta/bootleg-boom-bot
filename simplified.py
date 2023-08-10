@@ -4,7 +4,7 @@ import yt_dlp as youtube_dl
 import os
 import asyncio
 
-TOKEN = 'YOUR_TOKEN_HERE'
+TOKEN = 'MTEzOTA0Mzc5ODQ3NTg4NjcwMw.GCo7Nu.KAiwo4AjleqyjTROuEK5LxZiEna-fAb7Hr8Olo'
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix='!', intents=intents)
 bot.remove_command('help')
@@ -85,10 +85,6 @@ def play_song(ctx, url_or_query):
 
 @bot.command()
 async def play(ctx, *, query):
-    if "list=" in query:
-        await ctx.send("Sorry, playlists are not currently supported.")
-        return
-
     if ctx.author.voice and ctx.author.voice.channel:
         channel = ctx.author.voice.channel
         voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
@@ -103,99 +99,3 @@ async def play(ctx, *, query):
             await ctx.send(f"Song added to the queue! Position: {len(song_queues[ctx.guild.id])}")
     else:
         await ctx.send("You are not connected to a voice channel!")
-
-
-
-@bot.command()
-async def skip(ctx):
-    """Skip the currently playing song."""
-    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-    
-    if voice.is_playing() or voice.is_paused():
-        voice.stop()
-        await ctx.send("Skipped the current song.")
-    else:
-        await ctx.send("No song is currently playing.")
-
-
-@bot.command()
-async def list(ctx):
-    """List all songs in the queue."""
-    queue = song_queues.get(ctx.guild.id)
-    
-    if not queue:
-        await ctx.send("The song queue is currently empty!")
-        return
-    
-    msg = "Songs in the queue:\n"
-    for idx, song_url in enumerate(queue, 1):
-        msg += f"{idx}. {song_url}\n"
-    await ctx.send(msg)
-
-
-@bot.command()
-async def remove(ctx, position: int):
-    """Remove a song from the queue at the specified position."""
-    queue = song_queues.get(ctx.guild.id)
-    
-    if not queue:
-        await ctx.send("The song queue is currently empty!")
-        return
-
-    if position < 1 or position > len(queue):
-        await ctx.send(f"Invalid position! Please choose a number between 1 and {len(queue)}.")
-        return
-
-    removed_url = queue.pop(position - 1)  # Adjust for 0-based index
-    await ctx.send(f"Removed {removed_url} from the queue.")
-
-
-@bot.command()
-async def clear(ctx):
-    """Clear all songs from the queue."""
-    song_queues[ctx.guild.id] = []
-    await ctx.send("Cleared the song queue.")
-
-
-@bot.command()
-async def help(ctx):
-    """Display available commands."""
-    commands_list = [
-        "💀 Sean's Bootleg Boom Bot Commands 💀",
-        "",
-        "```!play [youtube_url or search term] - Play a song from the given YouTube URL or search term.```",
-        "```!list - List all songs in the queue.```",
-        "```!remove [position] - Remove a song from the queue at the specified position.```",
-        "```!clear - Clear all songs from the queue.```",
-        "```!skip - Skip the currently playing song.```",
-        "```!pause - Pause the currently playing song.```",
-        "```!unpause - Unpause the song.```",
-        "```!help - Display this message.```"
-    ]
-    await ctx.send("\n".join(commands_list))
-
-
-@bot.command()
-async def pause(ctx):
-    """Pause the currently playing song."""
-    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-    
-    if voice.is_playing():
-        voice.pause()
-        await ctx.send("Paused the song.")
-    else:
-        await ctx.send("No song is playing.")
-
-
-@bot.command()
-async def unpause(ctx):
-    """Unpause the song."""
-    voice = discord.utils.get(bot.voice_clients, guild=ctx.guild)
-    
-    if voice.is_paused():
-        voice.resume()
-        await ctx.send("Resumed the song.")
-    else:
-        await ctx.send("The song is not paused.")
-
-bot.run(TOKEN)
